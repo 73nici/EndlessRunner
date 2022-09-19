@@ -7,6 +7,7 @@ public class MenuScript : MonoBehaviour
 {
     public void PlayGame()
     {
+        PlayerPrefs.SetInt("Score", 10);
         SceneManager.LoadScene("Scenes/SampleScene");
     }
 
@@ -14,5 +15,16 @@ public class MenuScript : MonoBehaviour
     {
         Debug.Log("Quit!");
         Application.Quit();
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Scenes/MainMenuScene");
+    }
+
+    public void GameOver()
+    {
+        PlayerPrefs.SetInt("Score", 10);
+        SceneManager.LoadScene("Scenes/GameOverScene");
     }
 }
