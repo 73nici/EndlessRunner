@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465878, g: 0.4964224, b: 0.57482475, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.35872743, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -285,8 +285,8 @@ Camera:
   m_GameObject: {fileID: 693865263}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0.15686275, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -326,14 +326,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693865263}
-  m_LocalRotation: {x: 0.109428585, y: -0, z: -0, w: 0.99399465}
-  m_LocalPosition: {x: 5.167, y: 4.667, z: -21.608}
+  m_LocalRotation: {x: 0.009699604, y: -0.31714222, z: -0.025705935, w: 0.94798}
+  m_LocalPosition: {x: 36.714, y: 9.6, z: 4.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 975363863}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 12.565, y: 0, z: 0}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0.119, y: -36.998, z: -3.147}
 --- !u!1 &837715247
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,9 +368,9 @@ MonoBehaviour:
   - {fileID: 1460838560}
   percentageForGeneratingObstaclePerField: 15
   xPosForObstacles:
-  - 0
-  - 1
-  - 2
+  - -0.5
+  - 0.5
+  - 1.5
   minimumSpaceBetweenObstacles: 2
   floor: {fileID: 1716392340}
   zPositionDifference: 20
@@ -390,6 +390,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &975363862
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +632,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221328533}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+<<<<<<< HEAD
 --- !u!54 &1221328538
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -777,7 +779,7 @@ Transform:
   m_Children:
   - {fileID: 1548227339}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1460838562
 BoxCollider:
@@ -1036,6 +1038,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &2110495862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,3 +1133,4 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+

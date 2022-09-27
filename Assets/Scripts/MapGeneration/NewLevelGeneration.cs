@@ -6,7 +6,6 @@ using Random = System.Random;
 
 public class NewLevelGeneration : MonoBehaviour
 {
-    //public GameObject[] section;
     public GameObject[] obstacles;
     public int percentageForGeneratingObstaclePerField = 15;
     public float[] xPosForObstacles = new []{ -0.5f, 0.5f, 1.5f };
@@ -17,8 +16,7 @@ public class NewLevelGeneration : MonoBehaviour
     public float zPositionStart = 0.5f;
     
     private bool _creatingSection = false;
-    //public int sectionNumber;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,22 +35,19 @@ public class NewLevelGeneration : MonoBehaviour
 
     IEnumerator GenerateSection()
     {
-        //sectionNumber = Random.Range(0, 0);
-        //Instantiate(section[sectionNumber], new Vector3(0,0,zPos), Quaternion.identity);
-        
         //Create Floor
         Instantiate(floor, new Vector3(0.5f, 0.5f, zPositionStart), Quaternion.identity);
 
         //Create Obstacle
         Random rnd = new Random();
         
-        for (int i = 0; i < zPositionDifference; i++)
+        for (int i = -zPositionDifference / 2; i < +zPositionDifference / 2; i++)
         {
             bool isGeneratingObstacle = rnd.Next(1,100) <= percentageForGeneratingObstaclePerField;
             if (isGeneratingObstacle)
             {
                 int xPosForObstacleIndex = rnd.Next(0, xPosForObstacles.Length);
-                Console.Write(xPosForObstacles.Length);
+
                 int selectedObstacleIndex = rnd.Next(0, obstacles.Length);
                 Instantiate(
                     obstacles[selectedObstacleIndex], 
@@ -67,8 +62,5 @@ public class NewLevelGeneration : MonoBehaviour
         zPositionStart += zPositionDifference;
         yield return new WaitForSeconds(2);
         _creatingSection = false;
-
-        
-        //https://www.youtube.com/watch?v=sB-kXEOTBcU&list=PLZ1b66Z1KFKit4cSry_LWBisrSbVkEF4t&index=7 13:18
     }
 }
