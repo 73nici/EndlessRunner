@@ -8,7 +8,7 @@ public class MenuScript : MonoBehaviour
     public void PlayGame()
     {
         PlayerPrefs.SetInt("Score", 10);
-        SceneManager.LoadScene("Scenes/SampleScene");
+        SceneManager.LoadScene("Scenes/Map");
     }
 
     public void QuitGame()

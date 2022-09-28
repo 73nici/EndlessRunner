@@ -1,38 +1,50 @@
 using System.Collections;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    [CanBeNull] private UnityEngine.Camera camera;
     private int score = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        camera = this.GetComponentInChildren<UnityEngine.Camera>();
-    }
-
+    private bool lockedInput = false;
     // Update is called once per frame
     void Update()
     {
-        camera = this.GetComponentInChildren<UnityEngine.Camera>();
         score++;
         PlayerPrefs.SetInt("Score", score);
         var newVector = this.transform.position;
         newVector.z += 0.1f;
         this.transform.position = newVector;
+
+        if (!lockedInput)
+        {
+            StartCoroutine(handleInput());
+            print(Time.fixedDeltaTime);
+            lockedInput = true;
+        }
         
-        handleInput();
     }
 
 
-
-    private void handleInput()
+    private IEnumerator handleInput()
     {
-        // getestet mit Xbox Controller und funktioniert :D
-        print(Input.GetAxis("Horizontal"));
+        // getestet mit Xbox Controller und funktioniert :
+        var horizontalValue = Input.GetAxis("Horizontal");
+
+        // move to right if possible
+        if (horizontalValue > 0 && transform.position.x != 1.5)
+        {
+            var newVector = transform.position;
+            newVector.x += 1;
+            transform.position = newVector;
+        } // move to left if possible
+        else if (horizontalValue < 0 && transform.position.x != -0.5)
+        {
+            var newVector = transform.position;
+            newVector.x -= 1;
+            transform.position = newVector;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+        lockedInput = false;
     }
 }
