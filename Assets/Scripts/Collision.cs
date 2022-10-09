@@ -8,27 +8,42 @@ public class Collision : MonoBehaviour
 {
     public int jumpMultiplier = 10;
     public float playerSpeed = 0.1f;
-    
-    private int _score = 0;
-    private bool _isGrounded = true;
-    private bool _lockedInput = false;
+
+    private Animator animator;
+    private CharacterController characterController;
     private Rigidbody _rigidbody;
+    private float originalStepOffset;
+
+    private int _score = 0;
+    private bool is_grounded = true;
+    private bool is_jumping = false;
+    private bool _lockedInput = false;
+
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
+        originalStepOffset = characterController.stepOffset;
     }
+
     private void OnCollisionEnter(UnityEngine.Collision collision)
     {
-        // Game ends here
+         //Game ends here
         if (collision.gameObject.CompareTag("Obstacle"))
-            SceneManager.LoadScene("Scenes/GameOverScene");
+        SceneManager.LoadScene("Scenes/GameOverScene");
     }
 
 
     private void OnCollisionStay(UnityEngine.Collision collisionInfo)
     {
-        // print("onStay");
-        _isGrounded = true;
+        print("onStay");
+        is_grounded = true;
+        animator.SetBool("is_grounded", true);
+        is_jumping = false;
+        animator.SetBool("is_falling", false);
+
     }
 
     private void FixedUpdate()
@@ -63,9 +78,12 @@ public class Collision : MonoBehaviour
             newVector.x -= 1;
         }
 
-        if (verticalValue > 0 && _isGrounded)
+        if (verticalValue > 0 && is_grounded)
         {
-            _isGrounded = false;
+            is_grounded = false;
+            animator.SetBool("is_grounded", false);
+            animator.SetBool("is_jumping", true);
+            is_jumping = true;
             _rigidbody.AddForce(new Vector3(0, 2, 0) * jumpMultiplier, ForceMode.Impulse);
         }
 
