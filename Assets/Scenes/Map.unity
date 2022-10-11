@@ -366,6 +366,7 @@ MonoBehaviour:
   obstacles:
   - {fileID: 1221328533}
   - {fileID: 1460838560}
+  - {fileID: 770755884}
   percentageForGeneratingObstaclePerField: 15
   xPosForObstacles:
   - -0.5
@@ -403,7 +404,7 @@ GameObject:
   - component: {fileID: 881165554}
   - component: {fileID: 881165557}
   - component: {fileID: 881165553}
-  - component: {fileID: 881165556}
+  - component: {fileID: 881165558}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -489,20 +490,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881165551}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &881165556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881165551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d16ce0f003f11541b38a7ffba5b8b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpMultiplier: 8
-  playerSpeed: 0.2
 --- !u!54 &881165557
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -519,6 +506,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &881165558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881165551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c34b3485eda684ea9375de687e65a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpMultiplier: 8
+  playerSpeed: 0.2
 --- !u!1 &919368095
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14d8e73442f28c3489d93a82e0c5bdb4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -3.26
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14d8e73442f28c3489d93a82e0c5bdb4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -971,7 +972,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4ac60301920f45958b5bf99214bdba2d, type: 2}
+  - {fileID: 2100000, guid: 541c9dca73b474d47834bbe3d3501edd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1095,7 +1096,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5720361775051490592}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1176,7 +1177,7 @@ CharacterController:
   m_GameObject: {fileID: 5720361775051490592}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
