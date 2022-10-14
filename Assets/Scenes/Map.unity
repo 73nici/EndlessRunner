@@ -387,7 +387,7 @@ MonoBehaviour:
   - 0.5
   - 1.5
   minimumSpaceBetweenObstacles: 2
-  floor: {fileID: 919132148553142941}
+  floor: {fileID: 1716392340}
   zPositionDifference: 20
   zPositionStart: 0.5
 --- !u!4 &837715249
