@@ -13,12 +13,12 @@ public class Collision : MonoBehaviour
     private CharacterController characterController;
     private Rigidbody _rigidbody;
     private float originalStepOffset;
+    private float ySpeed;
 
     private int _score = 0;
     private bool is_grounded = true;
     private bool is_jumping = false;
     private bool _lockedInput = false;
-
 
     private void Start()
     {
@@ -42,6 +42,7 @@ public class Collision : MonoBehaviour
         is_grounded = true;
         animator.SetBool("is_grounded", true);
         is_jumping = false;
+        animator.SetBool("is_jumping", false);
         animator.SetBool("is_falling", false);
 
     }
@@ -53,11 +54,17 @@ public class Collision : MonoBehaviour
         var newVector = transform.position;
         newVector.z += playerSpeed;
         transform.position = newVector;
+        ySpeed += Physics.gravity.y * Time.deltaTime;
 
         if (!_lockedInput)
         {
             StartCoroutine(HandleInput());
             _lockedInput = true;
+        }
+
+        if ((is_jumping && ySpeed < 0) || ySpeed < -2)
+        {
+            animator.SetBool("is_falling", true);
         }
     }
 
