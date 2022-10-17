@@ -1,66 +1,157 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
 public class NewLevelGeneration : MonoBehaviour
 {
+    public GameObject player;
+    private float _nextPlayerCheck = 0;
+
+    public int amountOfPreGeneratedFloors = 3;
+
     public GameObject[] obstacles;
-    public int percentageForGeneratingObstaclePerField = 15;
-    public float[] xPosForObstacles = new []{ -0.5f, 0.5f, 1.5f };
-    public int minimumSpaceBetweenObstacles = 3;
-    
+    public int obstaclePercentageGrowthFactor = 3;
+    private readonly float[] _xPosForObstacles = { -0.5f, 0.5f, 1.5f };
+    private int _percentageForGeneratingObstacle = 0;
+    private int _leftBorder = 33;
+    private int _rightBorder = 66;
+    private int _nextPlayerZForDiffInc = 100;
+
     public GameObject floor;
     public int zPositionDifference = 20;
-    public float zPositionStart = 0.5f;
-    
-    private bool _creatingSection = false;
+    public float zPosition = 0.5f;
+
+    // Allocation is important!!!
+    private List<GameObject> _generatedObjects = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
-        zPositionStart += zPositionDifference;
+        zPosition += zPositionDifference;
+        for (int i = 0; i < amountOfPreGeneratedFloors; i++)
+        {
+            GenerateSection();
+        }
+
+        _nextPlayerCheck = player.transform.position.z + zPositionDifference;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_creatingSection == false)
+        if (player.transform.position.z >= _nextPlayerCheck)
         {
-            _creatingSection = true;
-            StartCoroutine(GenerateSection());
+            _nextPlayerCheck += zPositionDifference;
+            GenerateSection();
+            ClearSections();
+        }
+
+        if (player.transform.position.z >= _nextPlayerZForDiffInc)
+        {
+            obstaclePercentageGrowthFactor += 1;
+            _nextPlayerZForDiffInc += 100;
         }
     }
 
-    IEnumerator GenerateSection()
+    private void GenerateSection()
     {
-        //Create Floor
-        Instantiate(floor, new Vector3(0.5f, 0.5f, zPositionStart), Quaternion.identity);
+        // Create Floor
+        _generatedObjects.Add(Instantiate(floor, new Vector3(0.5f, 0.5f, zPosition), Quaternion.identity));
 
-        //Create Obstacle
-        Random rnd = new Random();
-        
+        // Create Obstacle
         for (int i = -zPositionDifference / 2; i < +zPositionDifference / 2; i++)
         {
-            bool isGeneratingObstacle = rnd.Next(1,100) <= percentageForGeneratingObstaclePerField;
-            if (isGeneratingObstacle)
+            if (RandomizerObstacles())
             {
-                int xPosForObstacleIndex = rnd.Next(0, xPosForObstacles.Length);
-
+                Random rnd = new Random();
+                int xPosForObstacleIndex = RandomizerXPosForObstacle();
                 int selectedObstacleIndex = rnd.Next(0, obstacles.Length);
-                Instantiate(
-                    obstacles[selectedObstacleIndex], 
-                    new Vector3(xPosForObstacles[xPosForObstacleIndex], 
-                        1.5f, zPositionStart + i), Quaternion.identity);
-                
-                i += minimumSpaceBetweenObstacles; //Dont generate impossible Parcour with one obstacle every field
+
+                _generatedObjects.Add(
+                    Instantiate(
+                        obstacles[selectedObstacleIndex],
+                        new Vector3(_xPosForObstacles[xPosForObstacleIndex],
+                            1.5f, zPosition + i), Quaternion.identity)
+                );
             }
         }
-        
-        //End Function
-        zPositionStart += zPositionDifference;
-        yield return new WaitForSeconds(1.5f);
-        _creatingSection = false;
+
+        // End Function
+        zPosition += zPositionDifference;
+    }
+
+    private void ClearSections()
+    {
+        List<GameObject> objectsToRemove = new List<GameObject>();
+
+        // Destroy Objects if Condition
+        foreach (var generatedObject in _generatedObjects)
+        {
+            if (generatedObject.transform.position.z < player.transform.position.z - zPositionDifference)
+            {
+                Destroy(generatedObject);
+                objectsToRemove.Add(generatedObject);
+            }
+        }
+
+        // Remove them out of the list
+        foreach (var objectToRemove in objectsToRemove)
+        {
+            _generatedObjects.Remove(objectToRemove);
+        }
+
+    }
+
+    private bool RandomizerObstacles()
+    {
+        Random rnd = new Random();
+
+        bool isGeneratingObstacle = rnd.Next(1, 100) <= _percentageForGeneratingObstacle;
+
+        _percentageForGeneratingObstacle = (isGeneratingObstacle) ? 0 : _percentageForGeneratingObstacle + obstaclePercentageGrowthFactor;
+
+        return isGeneratingObstacle;
+    }
+
+    private int RandomizerXPosForObstacle()
+    {
+        Random rnd = new Random();
+
+        //      ObstacleLeft  |  ObstacleMiddle  |  ObstacleRight
+        //  0             leftBorder       rigthBorder           100
+
+        int randomNumber = rnd.Next(0, 100);
+
+        if (randomNumber < _leftBorder)
+        {
+            if (_leftBorder >= 10)
+            {
+                _leftBorder -= 10;
+                _rightBorder -= 5;
+            }
+            return 0;
+        }
+        else if (randomNumber > _leftBorder && randomNumber < _rightBorder)
+        {
+            if (_rightBorder - _leftBorder >= 11)
+            {
+                _leftBorder += 5;
+                _rightBorder -= 5;
+            }
+            return 1;
+        }
+        else if (randomNumber > _rightBorder)
+        {
+            if (_rightBorder <= 89)
+            {
+                _leftBorder += 5;
+                _rightBorder += 10;
+            }
+            return 2;
+        }
+
+        //This Shouldn't happen
+        return 0;
     }
 }
