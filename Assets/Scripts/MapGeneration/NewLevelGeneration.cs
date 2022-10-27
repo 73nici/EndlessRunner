@@ -9,14 +9,15 @@ public class NewLevelGeneration : MonoBehaviour
     private float _nextPlayerCheck = 0;
 
     public int amountOfPreGeneratedFloors = 3;
-
+    
     public GameObject[] obstacles;
-    public int obstaclePercentageGrowthFactor = 3;
+    public int[] obstaclesWidth;
+    public int obstaclePercentageGrowthFactor = 2;
     private readonly float[] _xPosForObstacles = { -0.5f, 0.5f, 1.5f };
     private int _percentageForGeneratingObstacle = 0;
     private int _leftBorder = 33;
     private int _rightBorder = 66;
-    private int _nextPlayerZForDiffInc = 100;
+    private int _nextPlayerZForDiffInc = 500;
 
     public GameObject floor;
     public int zPositionDifference = 20;
@@ -50,10 +51,10 @@ public class NewLevelGeneration : MonoBehaviour
         if (player.transform.position.z >= _nextPlayerZForDiffInc)
         {
             obstaclePercentageGrowthFactor += 1;
-            _nextPlayerZForDiffInc += 100;
+            _nextPlayerZForDiffInc += 500;
         }
     }
-
+    
     private void GenerateSection()
     {
         // Create Floor
@@ -65,15 +66,29 @@ public class NewLevelGeneration : MonoBehaviour
             if (RandomizerObstacles())
             {
                 Random rnd = new Random();
-                int xPosForObstacleIndex = RandomizerXPosForObstacle();
                 int selectedObstacleIndex = rnd.Next(0, obstacles.Length);
+                
+                print(obstaclesWidth[selectedObstacleIndex]);
+
+                int xPosForObstacleIndex;
+                switch (obstaclesWidth[selectedObstacleIndex])
+                {
+                    case 1: xPosForObstacleIndex = RandomizerXPosForObstacle();
+                        break;
+                    case 2: xPosForObstacleIndex = 0;
+                        break;
+                    case 3: xPosForObstacleIndex = 1;
+                        break;
+                    default: xPosForObstacleIndex = 0;
+                        break;
+                }
 
                 _generatedObjects.Add(
                     Instantiate(
-                        obstacles[selectedObstacleIndex],
-                        new Vector3(_xPosForObstacles[xPosForObstacleIndex],
+                        obstacles[selectedObstacleIndex], 
+                        new Vector3(_xPosForObstacles[xPosForObstacleIndex], 
                             1.5f, zPosition + i), Quaternion.identity)
-                );
+                    );
             }
         }
 
@@ -84,7 +99,7 @@ public class NewLevelGeneration : MonoBehaviour
     private void ClearSections()
     {
         List<GameObject> objectsToRemove = new List<GameObject>();
-
+        
         // Destroy Objects if Condition
         foreach (var generatedObject in _generatedObjects)
         {
@@ -100,14 +115,14 @@ public class NewLevelGeneration : MonoBehaviour
         {
             _generatedObjects.Remove(objectToRemove);
         }
-
+        
     }
 
     private bool RandomizerObstacles()
     {
         Random rnd = new Random();
-
-        bool isGeneratingObstacle = rnd.Next(1, 100) <= _percentageForGeneratingObstacle;
+        
+        bool isGeneratingObstacle = rnd.Next(1,100) <= _percentageForGeneratingObstacle;
 
         _percentageForGeneratingObstacle = (isGeneratingObstacle) ? 0 : _percentageForGeneratingObstacle + obstaclePercentageGrowthFactor;
 
@@ -117,7 +132,7 @@ public class NewLevelGeneration : MonoBehaviour
     private int RandomizerXPosForObstacle()
     {
         Random rnd = new Random();
-
+        
         //      ObstacleLeft  |  ObstacleMiddle  |  ObstacleRight
         //  0             leftBorder       rigthBorder           100
 
@@ -131,8 +146,7 @@ public class NewLevelGeneration : MonoBehaviour
                 _rightBorder -= 5;
             }
             return 0;
-        }
-        else if (randomNumber > _leftBorder && randomNumber < _rightBorder)
+        } else if (randomNumber > _leftBorder && randomNumber < _rightBorder)
         {
             if (_rightBorder - _leftBorder >= 11)
             {
@@ -140,8 +154,7 @@ public class NewLevelGeneration : MonoBehaviour
                 _rightBorder -= 5;
             }
             return 1;
-        }
-        else if (randomNumber > _rightBorder)
+        } else if (randomNumber > _rightBorder)
         {
             if (_rightBorder <= 89)
             {

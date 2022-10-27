@@ -20,12 +20,15 @@ public class Collision : MonoBehaviour
     private bool is_jumping = false;
     private bool _lockedInput = false;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         originalStepOffset = characterController.stepOffset;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnCollisionEnter(UnityEngine.Collision collision)
@@ -87,10 +90,12 @@ public class Collision : MonoBehaviour
 
         if (verticalValue > 0 && is_grounded)
         {
+            Debug.Log(is_grounded);
             is_grounded = false;
             animator.SetBool("is_grounded", false);
             animator.SetBool("is_jumping", true);
             is_jumping = true;
+            audioSource.Play(0);
             _rigidbody.AddForce(new Vector3(0, 2, 0) * jumpMultiplier, ForceMode.Impulse);
         }
 
