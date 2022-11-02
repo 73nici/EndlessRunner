@@ -9,10 +9,10 @@ public class NewLevelGeneration : MonoBehaviour
     private float _nextPlayerCheck = 0;
 
     public int amountOfPreGeneratedFloors = 3;
-    
+
     public GameObject[] obstacles;
     public int[] obstaclesWidth;
-    public int obstaclePercentageGrowthFactor = 2;
+    public int obstaclePercentageGrowthFactor = 1;
     private readonly float[] _xPosForObstacles = { -0.5f, 0.5f, 1.5f };
     private int _percentageForGeneratingObstacle = 0;
     private int _leftBorder = 33;
@@ -24,7 +24,7 @@ public class NewLevelGeneration : MonoBehaviour
     public float zPosition = 0.5f;
 
     // Allocation is important!!!
-    private List<GameObject> _generatedObjects = new List<GameObject>();
+    private readonly List<GameObject> _generatedObjects = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +51,7 @@ public class NewLevelGeneration : MonoBehaviour
         if (player.transform.position.z >= _nextPlayerZForDiffInc)
         {
             obstaclePercentageGrowthFactor += 1;
-            _nextPlayerZForDiffInc += 500;
+            _nextPlayerZForDiffInc += 200;
         }
     }
     
@@ -61,23 +61,24 @@ public class NewLevelGeneration : MonoBehaviour
         _generatedObjects.Add(Instantiate(floor, new Vector3(0.5f, 0.5f, zPosition), Quaternion.identity));
 
         // Create Obstacle
-        for (int i = -zPositionDifference / 2; i < +zPositionDifference / 2; i++)
+        for (int i = (-zPositionDifference / 2) + 1; i < +zPositionDifference / 2; i++)
         {
             if (RandomizerObstacles())
             {
                 Random rnd = new Random();
+                
                 int selectedObstacleIndex = rnd.Next(0, obstacles.Length);
                 
-                print(obstaclesWidth[selectedObstacleIndex]);
-
                 int xPosForObstacleIndex;
                 switch (obstaclesWidth[selectedObstacleIndex])
                 {
                     case 1: xPosForObstacleIndex = RandomizerXPosForObstacle();
+                        i+=1;
                         break;
-                    case 2: xPosForObstacleIndex = 0;
+                    case 2: xPosForObstacleIndex = rnd.Next(1,2);
                         break;
                     case 3: xPosForObstacleIndex = 1;
+                        i+=3;
                         break;
                     default: xPosForObstacleIndex = 0;
                         break;
@@ -89,6 +90,8 @@ public class NewLevelGeneration : MonoBehaviour
                         new Vector3(_xPosForObstacles[xPosForObstacleIndex], 
                             1.5f, zPosition + i), Quaternion.identity)
                     );
+
+                print(zPosition+i);
             }
         }
 
@@ -125,7 +128,7 @@ public class NewLevelGeneration : MonoBehaviour
         bool isGeneratingObstacle = rnd.Next(1,100) <= _percentageForGeneratingObstacle;
 
         _percentageForGeneratingObstacle = (isGeneratingObstacle) ? 0 : _percentageForGeneratingObstacle + obstaclePercentageGrowthFactor;
-
+        
         return isGeneratingObstacle;
     }
 

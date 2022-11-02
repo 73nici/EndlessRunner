@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// TODO: this class handles player movement and 
 public class Collision : MonoBehaviour
 {
     public int jumpMultiplier = 10;
@@ -14,6 +13,7 @@ public class Collision : MonoBehaviour
     private Rigidbody _rigidbody;
     private float originalStepOffset;
     private float ySpeed;
+    private bool first_play = true;
 
     private int _score = 0;
     private bool is_grounded = true;
@@ -41,7 +41,6 @@ public class Collision : MonoBehaviour
 
     private void OnCollisionStay(UnityEngine.Collision collisionInfo)
     {
-        print("onStay");
         is_grounded = true;
         animator.SetBool("is_grounded", true);
         is_jumping = false;
@@ -73,7 +72,7 @@ public class Collision : MonoBehaviour
 
     private IEnumerator HandleInput()
     {
-        // getestet mit Xbox Controller und funktioniert :
+        // works with xbox controller
         var horizontalValue = Input.GetAxis("Horizontal");
         var verticalValue = Input.GetAxis("Vertical");
         var newVector = transform.position;
@@ -90,12 +89,17 @@ public class Collision : MonoBehaviour
 
         if (verticalValue > 0 && is_grounded)
         {
-            Debug.Log(is_grounded);
             is_grounded = false;
             animator.SetBool("is_grounded", false);
             animator.SetBool("is_jumping", true);
             is_jumping = true;
-            audioSource.Play(0);
+
+            if (first_play) {
+                first_play = false;
+                audioSource.Play(0);
+            } else {
+                first_play = true;
+            }
             _rigidbody.AddForce(new Vector3(0, 2, 0) * jumpMultiplier, ForceMode.Impulse);
         }
 
