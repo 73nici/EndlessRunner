@@ -12,6 +12,7 @@ public class RotateSky : MonoBehaviour
 
     void FixedUpdate()
     {
+        print("Hello");
         RenderSettings.skybox.SetFloat("_Rotation", Time.time * RotateSpeed);
     }
 }
