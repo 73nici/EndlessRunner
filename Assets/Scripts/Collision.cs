@@ -76,8 +76,8 @@ public class Collision : MonoBehaviour
         var horizontalValue = Input.GetAxis("Horizontal");
         var verticalValue = Input.GetAxis("Vertical");
         var newVector = transform.position;
+        
         // move to right if possible
-
         if (horizontalValue > 0 && transform.position.x <= 1f)
         {
             newVector.x += 1;
